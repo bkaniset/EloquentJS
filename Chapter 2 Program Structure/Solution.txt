@@ -1,0 +1,82 @@
+2.1 Looping a triangle 
+
+for (let i=1;i<=7;i++)
+{
+  let Str="";
+  for(let j=0;j<i;j++)
+  {
+    Str+="#";
+  }
+  console.log(Str);
+}
+
+2.2 FizzBuzz 
+
+let i=0; 
+while(i<=100)
+{  
+  if(i%3===0&&i%5===0)
+  {
+    console.log("FizzBuzz");
+  }
+  else if(i%3===0)
+  {
+  console.log("fizz");
+  }
+  else if(i%5===0)
+  {
+  console.log("buzz");
+  }
+  else
+  {
+  console.log(i);
+  }
+  i++;
+  
+}
+  
+
+
+2.3 Chessboard 
+
+let size = 8;
+let space=" "; 
+let hash="#";
+let str="";
+
+for(let i=0;i<size;i++)
+{
+  if(i%2==0)
+  {
+   for(let j=0;j<size;j++)
+   {
+    if(j%2==0)
+    {
+     str+=space;
+    }
+     else
+     {
+      str+=hash;
+     }
+   }
+  }
+  else
+  {    
+   for(let j=0;j<size;j++)
+   {
+    if(j%2==0)
+    {
+     str+=hash;
+    }
+     else
+     {
+     str+=space;
+     }
+   }
+  } 
+  str+="\n";
+}
+
+console.log(str);
+
+
