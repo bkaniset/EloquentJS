@@ -1,0 +1,5 @@
+14.1 Build a table 
+
+Logic: Build a table, 
+in a for loop create a node and add it to the table. 
+ 

@@ -1,0 +1,214 @@
+
+Working through the DOM by recursion. 
+
+
+function talksAbout(node, string) {
+if (node.nodeType == Node.ELEMENT_NODE) {
+for (let child of node.childNodes) {
+if (talksAbout(child, string)) {
+return true;
+}
+}
+return false;
+} else if (node.nodeType == Node.TEXT_NODE) {
+return node.nodeValue.indexOf(string) > -1;
+}
+}
+console.log(talksAbout(document.body, "book"));
+// → true
+
+
+Finding Elements. 
+
+
+let link = document.body.getElementsByTagName("a")[0]; 
+console.log(link.href);
+
+
+Finding Elements Through ID. 
+
+EG Source Document 
+
+<p> Image of a Bird </p> 
+<img id="Jude" src="/content/bird.jpg">
+
+<script> let source = document.body.getElementByID("Jude");
+console.log(source.src);
+</script>
+
+
+We can also find elements by classname using the getElementsByClassName. 
+
+<p>One</p>
+<p>Two</p>
+<p>Three</p>
+<script>
+let paragraphs = document.body.getElementsByTagName("p");
+<p>One</p>
+<p>Two</p>
+<p>Three</p>
+<script>
+let paragraphs = document.body.getElementsByTagName("p");
+document.body.insertBefore(paragraphs[2], paragraphs[0]);
+</script>
+
+Replacing Images with their alternative text 
+
+
+<p> The <img= src"content/Lion.png" alt="A Lion"> looks majestic, but it is not
+as strong as a tiger. A depiction of a tiger is here. <img src="content/tiger.png" alt="A Tiger"> 
+</p> 
+<p><button onclick = "replace()">Replace</button></p>
+
+<script> 
+function replace() 
+{
+let images = document.body.getElementsByTagName("img"); //  No 1. 
+for(let i=images.length-1;i>=0;i--)
+{
+let image=images[i];
+if(image.alt)
+{
+let text = document.createTextNode(image.alt);
+document.replaceElement(text, image); // No 2. 
+} // If Ends. 
+} // For Ends. 
+} // End of function replace(). 
+</script>
+
+Always remember that any collection returned by calling the document object is LIVE. 
+i.e. in reference No 2, when you remove the replaceElement, the length of collection becomes one 
+instead of two. 
+
+convert the collection to a real array if you want a solid list using Array.from method. 
+
+blockquote id="quote">
+No book can ever be finished. While working on it we learn
+just enough to find it immature the moment we turn away
+from it.
+</blockquote>
+<script>
+function elt(type, ...children) {
+let node = document.createElement(type);
+for (let child of children) {
+if (typeof child != "string") node.appendChild(child);
+else node.appendChild(document.createTextNode(child));
+}
+return node;
+}
+document.getElementById("quote").appendChild(
+elt("footer", "—",elt("strong", "Karl Popper"),", preface to the second edition of ", elt("em", "The Open Society and Its Enemies"),", 1950"));
+</script>
+
+
+Attributes
+
+Only the attributes present in the html documentation will be present here. 
+Attributes are key value pairs.
+
+<p data-classified="secret"> Launch code is 3443</p>
+<p data-classified="lite"> I have a billion dollars </p>
+
+<script> 
+let paras =Array.from(document.getElementByTagName("p"));
+for(let para of paras)
+{
+if(para.getAttribute("data-classified")==""secret)
+{
+para.remove();
+}
+}
+</script>
+
+Layout 
+
+<p style="border : 3px solid red"> I'am boxed in</p> 
+<script> 
+let para = document.body.getElementsbyTagName("p");
+console.log("clientHeight", para.clientHeight);
+console.log("OffsetHeight", para.OffsetHeight);
+</script>
+
+Any change to the DOM of a html document requires the browser to recompute the layout of it. 
+hence, scripts that measure repeatedly the changes made to the document run slowly. Consider the below two functions; 
+
+
+<p span-id="one"></p>
+<p span-id="two"></p>
+<script> 
+function runTime(name, action)
+{
+ let start =Date.now(); 
+ action(); 
+ console.log(name+ "took" + Date.now()-start+ "Milliseconds"); 
+}
+
+runTime("Naive", () => {
+let target = document.body.getElementByID("one");
+while(target.offset <2000)  // No 1. 
+{
+target.appendChild(document.createTextNode("X"));
+}
+});
+
+runTime("clever", () => { 
+let target = document.body.getElementByName("two");
+target.appendChild(document.createTextNode("XXXXX")); 
+let total =Math.ceil(2000 / (target.offsetWidth/5));  //No 2. 
+target.firstChild.NodeValue = "X".repeat(total);    //No 3.
+}
+});
+</script>
+
+In the above example, in No1, after every change in the document, we are measuring the document. 
+In the second function, in lines No 2, we measure how much average offset of the character "X" 
+is and No 3, we create a string of "X"'s of that length and append it directly. 
+
+STYLE 
+
+<p id="para" style="colour : purple"> Nice Text </p> 
+<script>
+let para = document.getElementByID("para");
+para.style.colour = magenta; 
+</script> 
+
+The styling system for html is called cascading style sheets. Refer to the mozilla documentation for 
+more information about it. 
+
+Query Selectors 
+
+<p>And if you go chasing
+<span class="animal">rabbits</span></p>
+<p>And you know you're going to fall</p>
+<p>Tell 'em a <span class="character">hookah smoking
+<span class="animal">caterpillar</span></span></p>
+<p>Has given you the call</p>
+
+In the above document, you can use the QueryselectorAll method to grasp many elements. 
+<script>
+function count(selector)
+{
+return document.querySelectorAll(selector).length;
+}
+</script> 
+
+console.log(count("p")) -----------> returns 4 as there are 4 paragraph elements. 
+console.log(count(".animal")) -----> returns 2 as there are 2 animal span classes. 
+console.log(count("p .animal"))----> returns 2 as there are 2 animal span classes within paragraphs. 
+console.log(count("p >.animal"))---> returns 1 as there is only 1 animal span class as a direct child of P.  
+
+NOTE: Although the collection returned by querySelectorAll method is not live, but it is not a perfect array 
+either. you still need to build an array on top of it. 
+
+Positioning and Animating 
+
+Script Given. 
+
+
+
+
+
+ 
+
+
+

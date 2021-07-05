@@ -1,0 +1,146 @@
+// Run code here in the context of Chapter 9
+
+let a = new RegExp("abc");
+let b = /abc/; 
+
+console.log(b.test("abxde")); 
+
+console.log((/[0-9]/).test("1990"));
+
+let quotedText = /'([^']*)'/;
+console.log(quotedText.exec("she said 'hello'"));
+
+//  
+
+let dateTime  = /\d\d-\d\d-\d\d\d\d\ \d\d:\d\d/;
+console.log(" Date Time regular Expression " + dateTime.test("05-02-2021 13:34"));
+
+let notBinary = /[^01]/; 
+console.log("Binary Test "+ notBinary.test("000110101"));
+
+let multipleDigits = /\d+/; 
+console.log("Multiple Digits test "+ multipleDigits.test("123"));
+
+console.log("----------Test Question Mark character----------------"); 
+
+let questionMark = /neighbou?r/;
+
+console.log(questionMark.test("neighbor"));
+
+console.log("----------Range----------------"); 
+
+let dateTimeRange  = /\d{1,2}-\d{1,2}-\d{4} \d{1,2}:\d{2}/;
+console.log(" Date Time regular Expression " + dateTimeRange.test("05-02-2021 13:34"));
+
+console.log("----------Paranthesis----------------"); 
+
+let  cartooncrying = /boo+(hoo+)+/i ; 
+console.log(cartooncrying.test("Boohoohooooohooooo"));
+
+console.log("----------Exec Function----------------"); 
+
+let info = /\d+/.exec("The number is 100"); 
+console.log(info);
+console.log(info.index);
+
+let c1 = /bad(ly)?/; 
+console.log(c1.exec("bad")); 
+
+let d1 = /(\d)+/; 
+console.log(d1.exec("123"));
+
+console.log("----------------DATE CLASS---------------") 
+
+console.log(new Date());
+
+let anis = /\b\d+ (pig|cow|chicken)s?\b/; 
+
+console.log(anis.exec("15 pigs"));
+
+console.log("----------------String Replace---------------") 
+
+console.log("papa".replace('a','s')); 
+
+console.log("barobudur".replace(/[ou]/,"a"));
+
+console.log("barobudur".replace(/[ou]/g,"a"));
+
+console.log("----------------Replace Function---------------") 
+
+console.log("Kanisetti, Bala\nDidla, Sam\nMallepally, Vikram".replace(/(\w+) , (\w+)/g, "$2 $1"));
+
+console.log("----------------Functions with regex---------------") 
+
+let g = "cia and fbi are good organizations to work.";
+console.log(g.replace(/\b(cia|fbi)\b/g, str => str.toUpperCase()));
+
+let stock = "1 lemons, 2 cabbages and 101 Eggs";
+
+function minusOne(match, amount, unit)
+{
+amount = Number(amount)-1;
+  if(amount == 1)
+  {
+   unit = unit.slice(0,unit.length-1);
+  }
+  else if(amount == 0)
+  {
+  amount = "no";
+  }
+  return amount+" "+unit+" in the Stock"; 
+}
+
+console.log(stock.replace(/(\d+) (\w+)/g, minusOne));
+
+console.log("----------------Dynamic Regular Expressions---------------") 
+
+console.log("financialAccountSubtype".toUpperCase());
+
+console.log("----------------Search---------------") 
+
+console.log("      ".search(/\S/)); 
+
+console.log("----------------Last Index with Exec---------------") 
+
+let exp = /y/g ; 
+exp.lastIndex = 3;
+
+let match = exp.exec("xyzzzy"); 
+
+console.log(match.index+" pattern Index "+ exp.lastIndex); 
+
+console.log("----------------Looping over Matches---------------") 
+
+let input = "A string with 3 numbers in it... 42 and 88."; 
+let number = /\b\d+\b/g ; 
+let m ; 
+
+while(m = number.exec(input))
+{
+ console.log(m[0] + " Found at "+ m.index);
+}
+
+console.log("---------------------------------------------------") 
+
+
+function parseINI(string) {
+  // Start with an object to hold the top-level fields
+  let result = {};
+  let section = result;
+  string.split(/\r?\n/).forEach(line => {
+    let match;
+    if (match = line.match(/^(\w+)=(.*)$/)) {
+      section[match[1]] = match[2];
+    } else if (match = line.match(/^\[(.*)\]$/)) {
+      section = result[match[1]] = {};
+    } else if (!/^\s*(;.*)?$/.test(line)) {
+      throw new Error("Line '" + line + "' is not valid.");
+    }
+  });
+  return result;
+}
+
+console.log(parseINI(`
+name=Vasilis
+[address]
+city=Tessaloniki`));

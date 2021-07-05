@@ -1,0 +1,52 @@
+12.1 Arrays 
+
+12.1.A Construct an array using array(...values). 
+
+topscope.array 
+{
+let  = []; 
+for (let i=0; i < (...values).length-1;i++)
+{
+topscope
+}
+}
+
+
+12.2 Closure. 
+The definition of fun is given as below; 
+
+return function() {
+if (arguments.length != params.length) {
+throw new TypeError("Wrong number of arguments");
+}
+let localScope = Object.create(scope);
+for (let i = 0; i < arguments.length; i++) {
+localScope[params[i]] = arguments[i];
+}
+return evaluate(body, localScope);
+};
+}; 
+
+The local scope is not created as a null object. It is created using 
+an existing object as a prototype and will have all the information in the upper scope.  
+
+Example Code: 
+
+
+
+12.3 Modified Skipspace 
+
+
+// This is the old skipSpace. Modify it...
+function skipSpace(string) {
+  let first = string.search(/\S/);   
+  if (first == -1) return "";
+  string = string.slice(first);
+  let comment =string.search(/(^#.*)*/);
+  return string.slice(comment);   
+}
+
+12.4 Fixing Scope 
+
+need to work a lot on syntax and everything ! 
+

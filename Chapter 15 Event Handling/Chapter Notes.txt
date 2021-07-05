@@ -1,0 +1,344 @@
+Add an click event handler by; 
+
+<p> click on this document to hear a joke </p> 
+<script>
+window.addEventListener("click", () => {
+console.log("Knock Vest Knock Vest");
+});
+</script>
+
+Setting the Context of an event. 
+
+<button>Click here </button>
+<p>Nothing happens if you click here</p>
+<script> 
+let btn = document.querySelector("button");
+btn.addEventListener("click", () => {
+console.log("Knock Vest, Heil");
+});
+</script>
+
+
+Removing an Eventhandler.  
+
+<button> This button works only once.</button>
+<script>
+let btn = document.querySelector("button");
+function once()
+  {
+    console.log("Button being Removed"); 
+    btn.removeEventListener("click", once);
+  }
+  btn.addEventListener("click" , once);
+</script>
+
+You may want to use the same function for both adding and removing handlers for functions. 
+
+Event Objects 
+
+Each event is represented by an object, whoose property "Type" tells us 
+the kind of event it is and how to add a handler to handle this event. 
+Other properties for event objects are varied according to the type of event. 
+
+<button>Click me anywhere </button>
+<script>
+let btn = document.querySelector("button");
+btn.addEventListener("click" , event => {
+ if(event.button == 0)
+ {
+ console.log("Left Button was Clicked");
+ }
+ else if(event.button == 1)
+ {
+ console.log("Middle Button was Clicked");
+ }
+ else if(event.button == 2)
+ {
+ console.log("Right Button was Clicked");
+ }  
+});
+                  
+</script> 
+
+
+Event Propagation. 
+
+Events are like ripples in a lake or a pond. When the user interacts with the pond by throwing a stone into it, 
+ripples propagate from the point of contact towards the shore of the lake. Events also propagate through the document 
+in a similar manner. They start from the node they have happened and propagate outward, to the node's parent, to its 
+parent and to the whole of the document. 
+However, unlike playing with pebbles, there is a way for us to stop this event propagation- stopPropagation. 
+
+
+<p>To Know more about this process<button>Click me.</button> </p>
+<script>
+  
+let btn = document.querySelector("button");
+let para =document.querySelector("p");  
+para.addEventListener("mouseDown", () => { 
+ console.log("Handler for Para"); 
+});
+btn.addEventListener("mouseDown", event => {
+console.log("Racha Rambola Pls");  
+if(event.button == 1) 
+{
+event.stopPropagation();
+}
+});                  
+</script>
+
+Target Property. 
+
+
+<button>A</button>
+<button>B</button>
+<button>C</button>
+<script>
+document.body.addEventListener("click", event => {
+if (event.target.nodeName == "BUTTON") {
+console.log("Clicked", event.target.textContent);
+}
+});
+</script>
+
+
+Default Actions 
+
+<a href="https://developer.mozilla.org/">MDN</a>
+<script>
+let link = document.querySelector("a");
+link.addEventListener("click", event => {
+console.log("Nope.");
+event.preventDefault();
+});
+</script>
+
+Key Events 
+
+<p> this page will turn violet if you press the V key. Press it again.</p>
+<script>
+window.addEventListener("Keydown" , event => {
+ if(event.key == "v")
+ { 
+document.body.style.background ="violet"; 
+ } 
+}); 
+window.addEventListener("Keyup" , event => {
+  if(event.key == "v")
+  {
+document.body.style.background =""; 
+  }
+});
+  
+</script>
+
+
+Special Keys 
+
+<p>Press Control-Space to continue</p>
+<script>
+window.addEventListener("keydown" , event => {
+if(event.key ==  " " && event.ctrlKey) {
+console.log("continue");
+}
+});
+</script> 
+
+The DOM node that has focus when the event gets fired is the one that is associated with the event. 
+Most nodes cannot have focus unless you add a tabindex attribute to it. 
+It is best to get the input directly from text areas. 
+
+Pointer Events 
+
+Mouse Clicks: 
+
+Mouse Up and Mouse down are similar to keyup and keydown events. 
+Click event occurs after mouse up event on the specific node that 
+contains the press and release of a button.
+
+Double click -> dblclick happens if two clicks happen very close. 
+Mouse Clicks have the following properties: 
+ClientX & ClientY - position of the event relative to the top left corner of the Window. 
+PageX & Page Y - position relative to the top left corner or the document.  
+
+Below program adds a dot every time you click on the document. 
+
+<style> 
+body {
+height : 200px ; 
+background : beige; 
+}
+.dot 
+{
+height : 8px; width : 8px; 
+border-radius : 4px; /*rounds corners*/
+background : blue; 
+position : absolute; 
+}
+</style> 
+<script> 
+window.addEventListener("click", event => {
+let dot = document.createElement("div");
+dot.ClassName = "dot";
+dot.style.left = (event.pageX-4) + "px";  
+dot.style.top = (event.pageY-4)+ "px";
+document.body.appendChild(dot);
+});
+</script> 
+
+
+MouseMove Event:  
+ 
+mousemove event happens everytime a mouse has moved. 
+This will help us to track the mouse movements. 
+
+The following program displays a bar and sets up event handlers so that 
+the bar grows wider or narrower depending on the event.  
+
+<p>Drag the bar to do funny stuff</p>
+<div style="background : orange; width : 60px ; height : 20px"></div> 
+<script>
+let lastX;  
+let bar = document.querySelector("div");
+bar.addEventHandler("mousedown", event => {
+if(event.button == 0)
+{
+lastX=event.clientX;
+window.addEventListner("mousemove" , moved);
+event.preventDefault(); 
+}
+});
+function moved(event)
+{
+if(event.buttons == 0)
+{
+window.removeEventListener("mousedown", moved);
+}
+else
+{
+let dist =event.clientX-lastX;
+let newWidth = Math.max(10, bar.offSetWidth+dist);
+bar.style.width = newWidth + "px"; 
+lastX = event.clientX;
+}
+}
+</script>
+
+Other interesting events: 
+
+Scroll- happens when you scroll. We can use the scroll event to display a progress bar 
+when a user scrolls through our page 
+<style>
+#progress {
+border-bottom : 2px solid blue; 
+width : 0;
+position : fixed;
+top : 0 ; left : 0;
+}
+</style>
+<div id="progress"></div>
+<script>
+document.body.appendChild(document.createTextNode("supercalifragilisticexpialidocious ".repeat(1000)));
+let bar = document.querySelector("#progress"); 
+window.addEventListener("scroll", () => {
+let max = document.body.scrollHeight - innerHeight; 
+bar.style.width = `${(pageYOffset/max)*100}%` ; 
+});
+</script>
+
+Event.preventDefault helps us to stop the event from firing when it is not required. 
+
+Focus Event: 
+
+Focus and blur events take place when a user interacts with an element that can be focused on. When 
+user interacts with such an element "focus" element gets fired and when he/she moves on from that 
+element, blur events take place. We can use these as the following; 
+
+<p>Name: <input-type="text" data-help="Your Full Name"></p>
+<p>Age: <input-type="text" data-help="Your Age in years"></p>
+<p id="help"></p>
+<script>
+let help = document.querySelector(#help);
+let fields = document.querySelector("p");
+for(let field of Array.from(fields))
+{
+field.addEventsListener("focus", event => {
+let text = event.target.getAttribute("data-help");
+help.textcontent = text;
+});
+field.addEventListener("blur" , event = {
+help.textcontent = "" ; 
+});
+}
+</script>
+
+Load Event: 
+
+Load event fires when the whole document is loaded. Images and scripts also fire a load event when the 
+file they refer to has finished loading. 
+When a user closes a page, a "beforeunload" event is fired. 
+
+Events and the Event Loop. 
+
+Event handlers function like any other asynchronous functions. They are scheduled to happen when 
+the event fires, but they must wait to be run. Which means, if the event is tied up with any other work, 
+other interactions with the page are delayed. Enter web workers. 
+
+Web workers are a process that runs parallel to the main script. In order to avoid multiple workers touching 
+the same data, workers do not share their main data or global scope with the main script. We need to work with 
+them by posting messages. 
+
+we can create a script called code/squareWorker.js and define the script as 
+
+addEventListener("message" , event => {
+postMessage(event.data*event.data); 
+});
+
+We can instantiate a worker object as; 
+
+let squareworker = new Worker("code/squareWorker.js")  // creates a worker from the script in code/squareWorker.js file. 
+squareworker.addEventListener("message", event =>
+{
+console.log("The worker responded :" , event.data);
+});
+
+
+Timers 
+
+You can use clear timer to clear and set time out. 
+
+let bombTimer = setTimeOut(() => {
+console.log("BOOM");
+},500); 
+
+if(Math.random()<0.5)
+{
+console.log("Defused");
+clearTimer(bombTimer);
+}  
+
+Similarly, you have complement functions such as 
+cancelAnimationFrame work requestAnimationFrame
+clearInterval for SetInterval.
+
+Note: The complements need to be called before their respective functions are called. 
+
+Event Debouncing 
+
+There are some events such as mousemove and scroll, which happen continously and rapidly.  
+These happen in situations where the user has to enter perfrom an action multiple times to get 
+the intended result. It would be helpful if we can postpone the event handler to fire until the 
+user completes the intended action. This is called Debouncing the event. 
+
+Way One : Using clear time out. 
+
+<textarea>Enter data here....</textarea>
+<script>
+let textarea = document.querySelector("textarea");
+let timeout; 
+textarea.addEventListener("input" , event => {
+clearTimeout(timeout); 
+}); 
+timeout = SetTimeOut(() =>console.log("Typed"), 500);
+</script>
+

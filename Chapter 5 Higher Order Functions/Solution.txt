@@ -1,0 +1,44 @@
+5.1 
+
+console.log(arrays.reduce((a,b) => a.concat(b)));
+
+5.2 
+
+function loop (value, test, update, body)
+{
+while(test(value))
+{
+body(value);
+value = update(value); 
+}
+}
+
+5.3 With a Loop 
+
+function every(array, test) {
+ let count=0;   
+ for (let element of array)
+ {
+   if(test(element))
+   {
+   count++;
+   }
+ }
+
+ if(count==array.length)
+ {
+ return true;
+ }
+  else
+  {
+  return false;
+  }
+}
+
+
+
+5.4 is remaining. 
+
+
+ 
+
